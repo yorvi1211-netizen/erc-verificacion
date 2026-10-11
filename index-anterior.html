@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101812">
+  <meta name="description" content="Portal oficial de verificación del Ejército de la República Colombiana.">
+  <title>Verificación | ERC</title>
+
+  <style>
+    :root {
+      --background: #0b100d;
+      --panel: #121a15;
+      --green: #294a35;
+      --green-light: #52795b;
+      --gold: #c6a663;
+      --text: #f0f2ed;
+      --muted: #a0aca2;
+      --border: rgba(198, 166, 99, .23);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% 0%, #203327 0%, transparent 55%),
+        var(--background);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .classification {
+      margin-bottom: 18px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 38px 30px 30px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(160deg, #17221a, var(--panel) 65%);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
+      text-align: center;
+    }
+
+    .card::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      content: "";
+    }
+
+    .emblem {
+      display: block;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 24px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .35));
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(23px, 5vw, 29px);
+      line-height: 1.25;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      max-width: 330px;
+      margin: 15px auto 25px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .separator {
+      height: 1px;
+      margin: 24px 0;
+      background: var(--border);
+    }
+
+    .section-title {
+      margin: 0 0 9px;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .instructions {
+      margin: 0 auto 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .verify-button {
+      display: flex;
+      width: 100%;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 14px 18px;
+      border: 1px solid #6c8a70;
+      border-radius: 4px;
+      background: var(--green);
+      color: white;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+
+    .verify-button:hover {
+      transform: translateY(-1px);
+      background: #355e42;
+    }
+
+    .verify-button:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .roblox-mark {
+      display: inline-flex;
+      width: 17px;
+      height: 17px;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(12deg);
+      border: 2px solid white;
+      font-size: 8px;
+    }
+
+    .security-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .security-note span:first-child {
+      color: var(--gold);
+    }
+
+    footer {
+      margin-top: 20px;
+      color: #738076;
+      font-size: 10px;
+      line-height: 1.8;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        padding: 30px 21px 24px;
+      }
+
+      .emblem {
+        width: 125px;
+        height: 125px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="classification">PORTAL INSTITUCIONAL · ERC</div>
+
+    <section class="card">
+      <img
+        class="emblem"
+        src="./banana.jpg"
+        alt="Escudo del Ejército de la República Colombiana"
+      >
+
+      <p class="eyebrow">SISTEMA DE IDENTIFICACIÓN</p>
+
+      <h1>EJÉRCITO DE LA<br>REPÚBLICA COLOMBIANA</h1>
+
+      <p class="subtitle">
+        Portal de verificación de identidad y vinculación
+        de cuentas de Roblox con Discord.
+      </p>
+
+      <div class="separator"></div>
+
+      <h2 class="section-title">Verificación de usuario</h2>
+
+      <p class="instructions">
+        Vincula tu cuenta de Roblox para comprobar tu identidad
+        y permitir que el sistema ERC sincronice tu rango y tus roles.
+      </p>
+
+      <!-- El enlace OAuth se configurará cuando publiquemos
+           y validemos la integración definitiva. -->
+      <a
+        class="verify-button"
+        href="#"
+        id="verifyButton"
+        aria-describedby="verifyHelp"
+      >
+        <span class="roblox-mark" aria-hidden="true">R</span>
+        VERIFICAR CON ROBLOX
+      </a>
+
+      <div class="security-note" id="verifyHelp">
+        <span aria-hidden="true">◆</span>
+        <span>
+          La autorización deberá realizarse mediante Roblox.
+          Nunca introduzcas tu contraseña de Roblox en esta página.
+        </span>
+      </div>
+    </section>
+
+    <footer>
+      EJÉRCITO DE LA REPÚBLICA COLOMBIANA<br>
+      SISTEMA DIGITAL DE VERIFICACIÓN
+    </footer>
+  </main>
+
+  <script>
+    // El botón permanecerá desactivado hasta configurar
+    // la URL OAuth real y comprobar el callback.
+    document.getElementById("verifyButton").addEventListener("click", function (event) {
+      event.preventDefault();
+      alert("El portal visual está preparado. La conexión de verificación se habilitará cuando terminemos de configurar el OAuth.");
+    });
+  </script>
+</body>
+</html>
