@@ -4,14 +4,15 @@
 /*
  * ERC | Portal de verificación
  *
- * La URL de inicio OAuth debe configurarse cuando el servidor
- * de autenticación esté listo y sea accesible públicamente.
+ * El portal recibe el retorno OAuth de Roblox y entrega
+ * code/state al Worker por HTTPS.
  *
- * No pongas aquí contraseñas, cookies de Roblox, client secrets
- * ni tokens privados.
+ * Nunca incluir secretos privados en este archivo.
  */
 const ERC_CONFIG = {
-  oauthStartUrl: ""
+  oauthStartUrl: "",
+  oauthCallbackBridgeUrl:
+    "https://erc-oauth.yorvi1211.workers.dev/oauth/callback"
 };
 
 const verifyButton = document.getElementById("verify-button");
@@ -25,7 +26,10 @@ function setStatus(message, isError = false) {
   dot.className = "status-dot";
   dot.setAttribute("aria-hidden", "true");
 
-  statusMessage.replaceChildren(dot, document.createTextNode(message));
+  statusMessage.replaceChildren(
+    dot,
+    document.createTextNode(message)
+  );
 }
 
 function isValidOAuthUrl(value) {
@@ -43,12 +47,75 @@ function isValidOAuthUrl(value) {
   }
 }
 
+async function handleOAuthReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const oauthError = params.get("error");
+
+  if (oauthError) {
+    setStatus(
+      "La autorización fue cancelada o rechazada. Regresa a Discord e inténtalo nuevamente.",
+      true
+    );
+    return;
+  }
+
+  if (!code && !state) return;
+
+  if (!code || !state || code.length > 4096 || state.length > 512) {
+    setStatus("La respuesta de Roblox está incompleta o no es válida.", true);
+    return;
+  }
+
+  verifyButton.disabled = true;
+  buttonLabel.textContent = "PROCESANDO…";
+  setStatus("Autorización recibida. Enviando respuesta segura al servidor…");
+
+  try {
+    const response = await fetch(ERC_CONFIG.oauthCallbackBridgeUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ code, state }),
+      cache: "no-store",
+      redirect: "error"
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    // Quita code y state de la barra de direcciones.
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+    setStatus(
+      "Respuesta enviada correctamente. Regresa a Discord para completar la verificación."
+    );
+    buttonLabel.textContent = "RESPUESTA ENVIADA";
+  } catch (error) {
+    console.error("Error enviando la respuesta OAuth:", error);
+
+    setStatus(
+      "No se pudo entregar la autorización al servidor. No repitas el proceso todavía; contacta con la administración.",
+      true
+    );
+    buttonLabel.textContent = "VERIFICAR CON ROBLOX";
+    verifyButton.disabled = false;
+  }
+}
+
 verifyButton.addEventListener("click", () => {
   const oauthUrl = ERC_CONFIG.oauthStartUrl.trim();
 
   if (!oauthUrl) {
     setStatus(
-      "La conexión con Roblox aún no está habilitada. El portal visual está listo; falta configurar el servidor OAuth.",
+      "El inicio de sesión aún no está conectado. Inicia la verificación desde Discord.",
       true
     );
     return;
@@ -56,7 +123,7 @@ verifyButton.addEventListener("click", () => {
 
   if (!isValidOAuthUrl(oauthUrl)) {
     setStatus(
-      "La dirección de autenticación no es válida. Contacta con el administrador del portal.",
+      "La dirección de autenticación no es válida. Contacta con el administrador.",
       true
     );
     return;
@@ -66,11 +133,7 @@ verifyButton.addEventListener("click", () => {
   buttonLabel.textContent = "CONECTANDO…";
   verifyButton.disabled = true;
 
-  try {
-    window.location.assign(oauthUrl);
-  } catch {
-    buttonLabel.textContent = "VERIFICAR CON ROBLOX";
-    verifyButton.disabled = false;
-    setStatus("No fue posible abrir el servicio de autenticación.", true);
-  }
+  window.location.assign(oauthUrl);
 });
+
+handleOAuthReturn();
